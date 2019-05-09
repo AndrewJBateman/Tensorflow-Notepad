@@ -10,7 +10,7 @@
   "author": "Stephen Grinder/ajb",
   "license": "ISC",
   "dependencies": {
-    "@tensorflow/tfjs-node": "^0.1.21",
+    "@tensorflow/tfjs-node": "^1.1.2",
     "lodash": "^4.17.11",
     "shuffle-seed": "^1.1.6"
   }

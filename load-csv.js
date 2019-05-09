@@ -1,6 +1,8 @@
 const fs = require('fs');
 const _ = require('lodash');
-const shuffleSeed = require('shuffle-seed');
+
+// library to shuffle an array of records
+const shuffleSeed = require('shuffle-seed'); 
 
 function extractColumns(data, columnNames) {
   const headers = _.first(data);
@@ -11,7 +13,7 @@ function extractColumns(data, columnNames) {
   return extracted;
 }
 
-module.exports = function loadCSV(
+function loadCSV(
   filename,
   {
     dataColumns = [],
@@ -22,8 +24,11 @@ module.exports = function loadCSV(
   }
 ) {
   let data = fs.readFileSync(filename, { encoding: 'utf-8' });
-  data = _.map(data.split('\n'), d => d.split(','));
-  data = _.dropRightWhile(data, val => _.isEqual(val, ['']));
+
+  // data = _.map(data.split('\n'), d => d.split(','));
+  // data = _.dropRightWhile(data, val => _.isEqual(val, ['']));
+  data = data.split('\n').map(row => row.split(','));
+  data = data.map(row => _.dropRightWhile(row, val => val === ''));
   const headers = _.first(data);
 
   data = _.map(data, (row, index) => {
@@ -47,6 +52,7 @@ module.exports = function loadCSV(
   data.shift();
   labels.shift();
 
+	// shuffle and splitTest are booleans
   if (shuffle) {
     data = shuffleSeed.shuffle(data, 'phrase');
     labels = shuffleSeed.shuffle(labels, 'phrase');
@@ -58,12 +64,27 @@ module.exports = function loadCSV(
       : Math.floor(data.length / 2);
 
     return {
-      features: data.slice(trainSize),
-      labels: labels.slice(trainSize),
-      testFeatures: data.slice(0, trainSize),
-      testLabels: labels.slice(0, trainSize)
+      features: data.slice(0, trainSize), // gives all data from train size to end of array
+      labels: labels.slice(0, trainSize),
+      testFeatures: data.slice(trainSize), // gives all data from 0 to trainsize
+      testLabels: labels.slice(trainSize)
     };
   } else {
-    return { features, data };
+    return { features: data, labels };
   }
-};
+}
+
+const { features, labels, testFeatures, testLabels } = loadCSV('data.csv', {
+  dataColumns: ['height', 'value'],
+  labelColumns: ['passed'],
+  shuffle: true,
+  splitTest: false,
+  converters: {
+    passed: val => (val === 'TRUE' ? 1 : 0)
+  }
+});
+
+console.log('Features', features);
+console.log('Labels', labels);
+console.log('testFeatures', testFeatures);
+console.log('testLabels', testLabels);
