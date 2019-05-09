@@ -47,13 +47,22 @@ Uses TensorFlow in javascript, following Udemy Course [Machine Learning With Jav
 
 ## Code Examples
 
+* result of typing: `node load-csv.js`
+
+```javascript
+Features [ [ 10, 20 ], [ 12, 22 ], [ 11, 21 ] ]
+Labels [ [ 1 ], [ 1 ], [ 0 ] ]
+testFeatures undefined
+testLabels undefined
+```
+
 ## Features
 
-* feature
+* to follow
 
 ## Status & To-Do List
 
-* Status:  Runs but data is incorrect.
+* Status:  returns Features and Labels but testFeatures and testLabels undefined - see Code Example
 
 * To-Do: correct data.
 

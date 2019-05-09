@@ -19,16 +19,15 @@ function loadCSV(
     dataColumns = [],
     labelColumns = [],
     converters = {},
-    shuffle = false,
+    shuffle = true,
     splitTest = false
   }
 ) {
   let data = fs.readFileSync(filename, { encoding: 'utf-8' });
 
-  // data = _.map(data.split('\n'), d => d.split(','));
-  // data = _.dropRightWhile(data, val => _.isEqual(val, ['']));
-  data = data.split('\n').map(row => row.split(','));
-  data = data.map(row => _.dropRightWhile(row, val => val === ''));
+  data = _.map(data.split('\n'), d => d.split(','));
+  data = _.dropRightWhile(data, val => _.isEqual(val, ['']));
+
   const headers = _.first(data);
 
   data = _.map(data, (row, index) => {
@@ -73,7 +72,7 @@ function loadCSV(
     return { features: data, labels };
   }
 }
-
+// destructuring used below
 const { features, labels, testFeatures, testLabels } = loadCSV('data.csv', {
   dataColumns: ['height', 'value'],
   labelColumns: ['passed'],
